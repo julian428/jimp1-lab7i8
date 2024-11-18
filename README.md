@@ -1,3 +1,3 @@
 @startuml
-    test -> test
+test -> test
 @enduml
