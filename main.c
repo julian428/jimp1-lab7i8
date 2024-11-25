@@ -8,7 +8,6 @@
 int main(int argc, char **argv)
 {
     char *filename = argc > 2 ? argv[1] : NULL;
-    // FILE *input = openFile(filename);
     FILE *input = openFile(filename);
     if (input == NULL)
     {
@@ -32,7 +31,8 @@ int main(int argc, char **argv)
         {
             if (checkWords(buf, ws[i]->word))
             {
-                ws[i]->lines[ws[i]->linesCount++] = line;
+                ws[i]->lines[ws[i]->linesCount] = line;
+                ws[i]->linesCount += 1;
             }
         }
     }
