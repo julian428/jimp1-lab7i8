@@ -1,22 +1,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-// #include "utils.h"
+#include "utils.h"
 
 #define BUFSIZE 8192
 
-typedef struct wordItem
-{
-    char *word;
-    int lines[100];
-    int linesCount;
-} wordItem_t, *wordsStorage_t;
-
 int main(int argc, char **argv)
 {
-    char *filename = argc > 2 ? argv[1] : stdin;
+    char *filename = argc > 2 ? argv[1] : NULL;
     // FILE *input = openFile(filename);
-    FILE *input = fopen(filename, "r");
+    FILE *input = openFile(filename);
     if (input == NULL)
     {
         fprintf(stderr, "Error: cannot open file %s\n", filename);
@@ -37,21 +30,12 @@ int main(int argc, char **argv)
     {
         for (int i = 0; i < wordsToFindCount; i++)
         {
-            if (strstr(buf, ws[i]) != NULL)
+            if (checkWords(buf, ws[i]->word))
             {
                 ws[i]->lines[ws[i]->linesCount++] = line;
             }
         }
     }
 
-    // TODO split module
-    for (int i = 0; i < wordsToFindCount; i++)
-    {
-        printf("%s: ", ws[i]->word);
-        for (int j = 0; j < ws[i]->linesCount; j++)
-        {
-            printf("%d ", ws[i]->lines[j]);
-        }
-        printf("\n");
-    }
+    printLines(ws, wordsToFindCount, stdout);
 }
