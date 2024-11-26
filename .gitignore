@@ -1,4 +1,2 @@
 .gitignore
-a.out
-a.out.dSYM
-*.o
+build

@@ -5,25 +5,29 @@ CC = gcc
 CFLAGS = -Wall -g
 
 # Target executable
-TARGET = program
+TARGET = build/program
 
 # Source files
 SRCS = main.c utils.c
 
 # Object files (derived from SRCS)
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:%.c=build/%.o)
 
 # Default target
-all: $(TARGET)
+all: build_dir $(TARGET)
 
 # Rule to create the executable
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS)
 
 # Rule to create object files
-%.o: %.c
+build/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
+
+# Create build directory if it doesn't exist
+build_dir:
+	mkdir -p build
 
 # Clean up build files
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f build/*.o build/program
