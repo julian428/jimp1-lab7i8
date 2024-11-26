@@ -33,7 +33,8 @@ int main(int argc, char **argv)
         {
             if (checkWords(buf, ws[i]->word))
             {
-                ws[i]->lines[ws[i]->linesCount++] = line;
+                ws[i]->lines[ws[i]->linesCount] = line;
+                ws[i]->linesCount += 1;
             }
         }
     }
