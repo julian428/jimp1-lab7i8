@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "run test with debugger (llvm)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/a.out",
+            "args": [
+                "dane.3",
+                "test"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "lldb",
+            "preLaunchTask": "build"
+        },
+    ],
+    "version": "2.0.0"
+}

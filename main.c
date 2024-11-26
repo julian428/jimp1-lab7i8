@@ -7,8 +7,7 @@
 
 int main(int argc, char **argv)
 {
-    char *filename = argc > 2 ? argv[1] : NULL;
-    // FILE *input = openFile(filename);
+    char *filename = argc > 1 ? argv[1] : NULL;
     FILE *input = openFile(filename);
     if (input == NULL)
     {
@@ -16,15 +15,17 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    // TODO split module
     int wordsToFindCount = argc - 2;
-    wordsStorage_t *ws = malloc(wordsToFindCount * sizeof(wordItem_t));
+
+    // todo: oddzielic to do innego modulu
+    wordsStorage_t *ws = malloc(wordsToFindCount * sizeof(wordsStorage_t));
     for (int i = 0; i < wordsToFindCount; i++)
     {
+        ws[i] = malloc(sizeof(wordItem_t));
         ws[i]->word = argv[i + 2];
+        ws[i]->linesCount = 0;
     }
 
-    // TODO split module
     char buf[BUFSIZE];
     for (int line = 1; fgets(buf, BUFSIZE, input) != NULL; line++)
     {
@@ -38,4 +39,14 @@ int main(int argc, char **argv)
     }
 
     printLines(ws, wordsToFindCount, stdout);
+
+    // todo: oddzielic to do innego modulu
+    for (int i = 0; i < wordsToFindCount; i++)
+    {
+        free(ws[i]);
+    }
+    free(ws);
+    fclose(input);
+
+    return 0;
 }
