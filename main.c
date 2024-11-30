@@ -6,8 +6,10 @@
 
 int main(int argc, char **argv)
 {
+    long fileSize;
     // argv[1] i tak zwraca null jak nie ma podanego pliku
-    FILE *input = openFile(argv[1]);
+    FILE *input = openFile(argv[1], &fileSize);
+
     if (input == NULL)
     {
         fprintf(stderr, "Error: cannot open file %s\n", argv[1]);
@@ -25,18 +27,7 @@ int main(int argc, char **argv)
         ws[i]->linesCount = 0;
     }
 
-    char buf[BUFSIZE];
-    for (int line = 1; fgets(buf, BUFSIZE, input) != NULL; line++)
-    {
-        for (int i = 0; i < wordsToFindCount; i++)
-        {
-            if (checkWords(buf, ws[i]->word))
-            {
-                ws[i]->lines[ws[i]->linesCount] = line;
-                ws[i]->linesCount += 1;
-            }
-        }
-    }
+    checkWords(input, fileSize, ws, wordsToFindCount);
 
     printLines(ws, wordsToFindCount, stdout);
     freeWordsMemory(ws, wordsToFindCount);

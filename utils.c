@@ -1,13 +1,40 @@
 #include "utils.h"
 
-FILE *openFile(char *filename)
+FILE *openFile(char *filename, long *fileSize)
 {
-    return filename != NULL ? fopen(filename, "r") : stdin;
+    FILE *file = filename != NULL ? fopen(filename, "r") : stdin;
+    if (filename == NULL)
+        return file;
+
+    // Move to the end of the file
+    fseek(file, 0, SEEK_END);
+
+    // Get the file size
+    *fileSize = ftell(file);
+    if (*fileSize == -1)
+        return NULL;
+
+    // Return to the beginning of the file
+    rewind(file);
+
+    return file;
 }
 
-int checkWords(char *source, char *word)
+void checkWords(FILE *file, long fileSize, wordsStorage_t *storage, int wordsCount)
 {
-    return strstr(source, word) != NULL;
+
+    char *buf = (char *)malloc(fileSize);
+    for (int line = 1; fgets(buf, fileSize, file) != NULL; line++)
+    {
+        for (int i = 0; i < wordsCount; i++)
+        {
+            if (strstr(buf, storage[i]->word))
+            {
+                storage[i]->lines[storage[i]->linesCount] = line;
+                storage[i]->linesCount += 1;
+            }
+        }
+    }
 }
 
 void printLines(wordsStorage_t *storage, int wordsStorageCount, FILE *output)

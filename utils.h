@@ -11,8 +11,8 @@ typedef struct wordItem
     int linesCount;
 } wordItem_t, *wordsStorage_t;
 
-FILE *openFile(char *filename);
-int checkWords(char *source, char *word);
+FILE *openFile(char *filename, long *fileSize);
+void checkWords(FILE *file, long fileSize, wordsStorage_t *storage, int wordsCount);
 void printLines(wordsStorage_t *storage, int wordsStorageSize, FILE *output);
 void freeWordsMemory(wordsStorage_t *ws, int wordsCount);
 #endif
