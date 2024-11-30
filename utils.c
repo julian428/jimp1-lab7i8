@@ -7,7 +7,7 @@ FILE *openFile(char *filename)
 
 int checkWords(char *source, char *word)
 {
-    return strstr(source, word) == NULL;
+    return strstr(source, word) != NULL;
 }
 
 void printLines(wordsStorage_t *storage, int wordsStorageCount, FILE *output)
