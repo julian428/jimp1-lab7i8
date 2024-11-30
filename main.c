@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 #include "utils.h"
 
 #define BUFSIZE 8192
@@ -40,13 +39,7 @@ int main(int argc, char **argv)
     }
 
     printLines(ws, wordsToFindCount, stdout);
-
-    // todo: oddzielic to do innego modulu
-    for (int i = 0; i < wordsToFindCount; i++)
-    {
-        free(ws[i]);
-    }
-    free(ws);
+    freeWordsMemory(ws, wordsToFindCount);
     fclose(input);
 
     return 0;

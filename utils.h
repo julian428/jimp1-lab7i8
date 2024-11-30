@@ -2,6 +2,7 @@
 #define UTILS_H
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct wordItem
 {
@@ -13,4 +14,5 @@ typedef struct wordItem
 FILE *openFile(char *filename);
 int checkWords(char *source, char *word);
 void printLines(wordsStorage_t *storage, int wordsStorageSize, FILE *output);
+void freeWordsMemory(wordsStorage_t *ws, int wordsCount);
 #endif
