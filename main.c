@@ -7,11 +7,11 @@
 
 int main(int argc, char **argv)
 {
-    char *filename = argc > 1 ? argv[1] : NULL;
-    FILE *input = openFile(filename);
+    // argv[1] i tak zwraca null jak nie ma podanego pliku
+    FILE *input = openFile(argv[1]);
     if (input == NULL)
     {
-        fprintf(stderr, "Error: cannot open file %s\n", filename);
+        fprintf(stderr, "Error: cannot open file %s\n", argv[1]);
         return 1;
     }
 

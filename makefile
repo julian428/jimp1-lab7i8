@@ -30,4 +30,4 @@ build_dir:
 
 # Clean up build files
 clean:
-	rm -f build/*.o build/program
+	rm -rf build
