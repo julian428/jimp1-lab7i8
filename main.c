@@ -12,13 +12,15 @@ int main(int argc, char **argv)
         return 1;
     }
 
-    int wordsToFindCount = argc - 2;
+    int wordsToFindCount = argc - 3;
 
-    wordsStorage_t *ws = newWordsStorage(wordsToFindCount, argv + 2);
+    wordsStorage_t *ws = newWordsStorage(wordsToFindCount, argv + 3);
 
     checkWords(input, ws, wordsToFindCount);
 
-    printLines(ws, wordsToFindCount, stdout, 1);
+    int sortResults = argc > 2 && atoi(argv[2]);
+
+    printLines(ws, wordsToFindCount, stdout, sortResults);
     freeWordsMemory(ws, wordsToFindCount);
     fclose(input);
 
