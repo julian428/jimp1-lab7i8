@@ -8,6 +8,7 @@ FILE *openFile(char *filename)
 }
 
 // TODO: co robić jak jedno słowo występuje kilka razy w jednej linii?
+// Nic, jak dla mnie tak powinno być
 void checkWords(FILE *file, wordsStorage_t *storage, int wordsCount)
 {
     // linia moze wykraczac poza BUFSIZE,
