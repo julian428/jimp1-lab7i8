@@ -3,12 +3,7 @@
         {
             "label": "build",
             "type": "shell",
-            "command": "cc",
-            "args": [
-                "-g", 
-                "main.c",
-                "utils.c"
-            ]
+            "command": "make",
         },
     ],
     "version": "2.0.0"

@@ -4,10 +4,10 @@
             "name": "run test with debugger (llvm)",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/a.out",
+            "program": "${workspaceFolder}/build/program",
             "args": [
                 "dane.3",
-                "test"
+                "nie"
             ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
