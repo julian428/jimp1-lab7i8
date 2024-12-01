@@ -1,40 +1,60 @@
 #include "utils.h"
 
-FILE *openFile(char *filename, long *fileSize)
+#define BUFSIZE 1024
+
+FILE *openFile(char *filename)
 {
-    FILE *file = filename != NULL ? fopen(filename, "r") : stdin;
-    if (filename == NULL)
-        return file;
-
-    // Move to the end of the file
-    fseek(file, 0, SEEK_END);
-
-    // Get the file size
-    *fileSize = ftell(file);
-    if (*fileSize == -1)
-        return NULL;
-
-    // Return to the beginning of the file
-    rewind(file);
-
-    return file;
+    return filename != NULL ? fopen(filename, "r") : stdin;
 }
 
-void checkWords(FILE *file, long fileSize, wordsStorage_t *storage, int wordsCount)
+// TODO: co robić jak jedno słowo występuje kilka razy w jednej linii?
+void checkWords(FILE *file, wordsStorage_t *storage, int wordsCount)
 {
-
-    char *buf = (char *)malloc(fileSize);
-    for (int line = 1; fgets(buf, fileSize, file) != NULL; line++)
+    // linia moze wykraczac poza BUFSIZE,
+    // bo robimy line++ tylko jak jest \n na koncu
+    // tak powinno być optymalniej niż robienie malloc(fileSize)
+    // bo co jak plik ma 100 GB?
+    char *buf = (char *)malloc(BUFSIZE);
+    int line = 1;
+    while (fgets(buf, BUFSIZE, file) != NULL)
     {
-        for (int i = 0; i < wordsCount; i++)
+        /**
+         * uzywamy strlen() bo nie wiemy jaki rzeczywisty rozmiar
+         * linijki został wczytany
+         */
+        int readLen = strlen(buf);
+        char lastChar = buf[readLen - 1];
+
+        /**
+         * tokenizujemy linijke po spacji i tabach
+         * i sprawdzamy czy slowo jest w naszej tablicy
+         * jesli tak to dodajemy numer linijki
+         * dla tablicy tego slowa
+         */
+        char *token = strtok(buf, " \t");
+        while (token != NULL)
         {
-            if (strstr(buf, storage[i]->word))
+            for (int i = 0; i < wordsCount; i++)
             {
-                storage[i]->lines[storage[i]->linesCount] = line;
-                storage[i]->linesCount += 1;
+                if (strcmp(token, storage[i]->word) == 0)
+                {
+                    storage[i]->lines[storage[i]->linesCount] = line;
+                    storage[i]->linesCount += 1;
+                }
             }
+            token = strtok(NULL, " \t");
         }
+
+        /**
+         * strtok() zmienia bufor, wiec musimy sprawdzic
+         * czy nie ma \n na koncu przed podzieleniem na tokeny
+         */
+        if (lastChar == '\n')
+            line++;
     }
+
+    // zwalniamy bufor po skonczeniu
+    free(buf);
 }
 
 void printLines(wordsStorage_t *storage, int wordsStorageCount, FILE *output)

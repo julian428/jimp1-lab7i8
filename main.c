@@ -2,17 +2,13 @@
 #include <string.h>
 #include "utils.h"
 
-#define BUFSIZE 8192
-
 int main(int argc, char **argv)
 {
-    long fileSize;
-    // argv[1] i tak zwraca null jak nie ma podanego pliku
-    FILE *input = openFile(argv[1], &fileSize);
+    FILE *input = openFile(argc > 1 ? argv[1] : NULL);
 
     if (input == NULL)
     {
-        fprintf(stderr, "Error: cannot open file %s\n", argv[1]);
+        fprintf(stderr, "Error: cannot open file\n");
         return 1;
     }
 
@@ -27,7 +23,7 @@ int main(int argc, char **argv)
         ws[i]->linesCount = 0;
     }
 
-    checkWords(input, fileSize, ws, wordsToFindCount);
+    checkWords(input, ws, wordsToFindCount);
 
     printLines(ws, wordsToFindCount, stdout);
     freeWordsMemory(ws, wordsToFindCount);
