@@ -31,7 +31,8 @@ void checkWords(FILE *file, wordsStorage_t *storage, int wordsCount)
          * jesli tak to dodajemy numer linijki
          * dla tablicy tego slowa
          */
-        char *token = strtok(buf, " \t");
+        char *lastTokenPtr;
+        char *token = strtok_r(buf, " \t\n", &lastTokenPtr);
         while (token != NULL)
         {
             for (int i = 0; i < wordsCount; i++)
@@ -42,7 +43,7 @@ void checkWords(FILE *file, wordsStorage_t *storage, int wordsCount)
                     storage[i]->linesCount += 1;
                 }
             }
-            token = strtok(NULL, " \t");
+            token = strtok_r(NULL, " \t\n", &lastTokenPtr);
         }
 
         /**
