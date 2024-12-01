@@ -75,11 +75,22 @@ int compareStorage(const void *a, const void *b)
     return strcmp(item1->word, item2->word);
 }
 
+int compareByLinesCount(const void *a, const void *b)
+{
+    const wordItem_t *item1 = *(const wordItem_t **)a;
+    const wordItem_t *item2 = *(const wordItem_t **)b;
+    return item2->linesCount < item1->linesCount; // Descending order
+}
+
 void printLines(wordsStorage_t *storage, int wordsStorageCount, FILE *output, int sort)
 {
-    if (sort)
+    if (sort == 1)
     {
         qsort(storage, wordsStorageCount, sizeof(wordsStorage_t), compareStorage);
+    }
+    else if (sort == 2)
+    {
+        qsort(storage, wordsStorageCount, sizeof(wordsStorage_t), compareByLinesCount);
     }
 
     for (int i = 0; i < wordsStorageCount; i++)
