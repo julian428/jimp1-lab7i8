@@ -68,8 +68,20 @@ void checkWords(FILE *file, wordsStorage_t *storage, int wordsCount)
     }
 }
 
-void printLines(wordsStorage_t *storage, int wordsStorageCount, FILE *output)
+int compareStorage(const void *a, const void *b)
 {
+    const wordItem_t *item1 = *(const wordItem_t **)a;
+    const wordItem_t *item2 = *(const wordItem_t **)b;
+    return strcmp(item1->word, item2->word);
+}
+
+void printLines(wordsStorage_t *storage, int wordsStorageCount, FILE *output, int sort)
+{
+    if (sort)
+    {
+        qsort(storage, wordsStorageCount, sizeof(wordsStorage_t), compareStorage);
+    }
+
     for (int i = 0; i < wordsStorageCount; i++)
     {
         fprintf(output, "%s: ", storage[i]->word);

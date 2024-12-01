@@ -18,7 +18,7 @@ int main(int argc, char **argv)
 
     checkWords(input, ws, wordsToFindCount);
 
-    printLines(ws, wordsToFindCount, stdout);
+    printLines(ws, wordsToFindCount, stdout, 1);
     freeWordsMemory(ws, wordsToFindCount);
     fclose(input);
 
