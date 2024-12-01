@@ -15,7 +15,7 @@ void checkWords(FILE *file, wordsStorage_t *storage, int wordsCount)
     // bo robimy line++ tylko jak jest \n na koncu
     // tak powinno być optymalniej niż robienie malloc(fileSize)
     // bo co jak plik ma 100 GB?
-    char *buf = (char *)malloc(BUFSIZE);
+    char buf[BUFSIZE];
     int line = 1;
     while (fgets(buf, BUFSIZE, file) != NULL)
     {
@@ -54,9 +54,6 @@ void checkWords(FILE *file, wordsStorage_t *storage, int wordsCount)
         if (lastChar == '\n')
             line++;
     }
-
-    // zwalniamy bufor po skonczeniu
-    free(buf);
 }
 
 void printLines(wordsStorage_t *storage, int wordsStorageCount, FILE *output)
