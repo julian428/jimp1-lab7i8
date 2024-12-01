@@ -14,14 +14,7 @@ int main(int argc, char **argv)
 
     int wordsToFindCount = argc - 2;
 
-    // todo: oddzielic to do innego modulu
-    wordsStorage_t *ws = malloc(wordsToFindCount * sizeof(wordsStorage_t));
-    for (int i = 0; i < wordsToFindCount; i++)
-    {
-        ws[i] = malloc(sizeof(wordItem_t));
-        ws[i]->word = argv[i + 2];
-        ws[i]->linesCount = 0;
-    }
+    wordsStorage_t *ws = newWordsStorage(wordsToFindCount, argv + 2);
 
     checkWords(input, ws, wordsToFindCount);
 

@@ -7,6 +7,18 @@ FILE *openFile(char *filename)
     return filename != NULL ? fopen(filename, "r") : stdin;
 }
 
+wordsStorage_t *newWordsStorage(int wordsCount, char **words)
+{
+    wordsStorage_t *ws = malloc(wordsCount * sizeof(wordItem_t *));
+    for (int i = 0; i < wordsCount; i++)
+    {
+        ws[i] = malloc(sizeof(wordItem_t));
+        ws[i]->word = words[i];
+        ws[i]->linesCount = 0;
+    }
+    return ws;
+}
+
 // TODO: co robić jak jedno słowo występuje kilka razy w jednej linii?
 // Nic, jak dla mnie tak powinno być
 void checkWords(FILE *file, wordsStorage_t *storage, int wordsCount)
