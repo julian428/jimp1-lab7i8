@@ -2,6 +2,65 @@
 
 #define BUFSIZE 1024
 
+int_vec* intvec_new(size_t initialCapacity)
+{
+    int_vec *vec = (int_vec *)malloc(sizeof(int_vec));
+    if (!vec)
+    {
+        perror("int_vec malloc failed");
+        exit(EXIT_FAILURE);
+    }
+    intvec_init(vec, initialCapacity);
+    return vec;
+}
+
+void intvec_init(int_vec *vec, size_t initialCapacity)
+{
+    vec->data = (int *)malloc(initialCapacity * sizeof(int));
+    if (!vec->data)
+    {
+        perror("int_vec malloc failed");
+        exit(EXIT_FAILURE);
+    }
+    vec->size = 0;
+    vec->capacity = initialCapacity;
+}
+
+void intvec_pushback(int_vec *vec, int value)
+{
+    if (vec->size == vec->capacity)
+    {
+        // Resize the vector when full
+        vec->capacity *= 2;
+        int *newData = (int *)realloc(vec->data, vec->capacity * sizeof(int));
+        if (!newData)
+        {
+            perror("int_vec realloc failed memory");
+            exit(EXIT_FAILURE);
+        }
+        vec->data = newData;
+    }
+    vec->data[vec->size++] = value;
+}
+
+int intvec_getitem(int_vec *vec, size_t index)
+{
+    if (index >= vec->size)
+    {
+        fprintf(stderr, "int_vec: index out of bounds\n");
+        exit(EXIT_FAILURE);
+    }
+    return vec->data[index];
+}
+
+void freeVector(int_vec *vec)
+{
+    free(vec->data);
+    vec->data = NULL;
+    vec->size = 0;
+    vec->capacity = 0;
+}
+
 FILE *openFile(char *filename)
 {
     return filename != NULL ? fopen(filename, "r") : stdin;
@@ -14,7 +73,7 @@ wordsStorage_t *newWordsStorage(int wordsCount, char **words)
     {
         ws[i] = malloc(sizeof(wordItem_t));
         ws[i]->word = words[i];
-        ws[i]->linesCount = 0;
+        ws[i]->lines = intvec_new(100);
     }
     return ws;
 }
@@ -52,8 +111,7 @@ void checkWords(FILE *file, wordsStorage_t *storage, int wordsCount)
             {
                 if (strcmp(token, storage[i]->word) == 0)
                 {
-                    storage[i]->lines[storage[i]->linesCount] = line;
-                    storage[i]->linesCount += 1;
+                    intvec_pushback(storage[i]->lines, line);
                 }
             }
             token = strtok_r(NULL, " \t", &lastTokenPtr);
@@ -79,7 +137,8 @@ int compareByLinesCount(const void *a, const void *b)
 {
     const wordItem_t *item1 = *(const wordItem_t **)a;
     const wordItem_t *item2 = *(const wordItem_t **)b;
-    return item2->linesCount < item1->linesCount; // Descending order
+    // return item2->linesCount < item1->linesCount; // Descending order
+    return item1->lines->size - item2->lines->size;
 }
 
 void printLines(wordsStorage_t *storage, int wordsStorageCount, FILE *output, int sort)
@@ -96,9 +155,9 @@ void printLines(wordsStorage_t *storage, int wordsStorageCount, FILE *output, in
     for (int i = 0; i < wordsStorageCount; i++)
     {
         fprintf(output, "%s: ", storage[i]->word);
-        for (int j = 0; j < storage[i]->linesCount; j++)
+        for (int j = 0; j < storage[i]->lines->size; j++)
         {
-            fprintf(output, "%d ", storage[i]->lines[j]);
+            fprintf(output, "%d ", intvec_getitem(storage[i]->lines, j));
         }
         fprintf(output, "\n");
     }

@@ -4,11 +4,23 @@
 #include <string.h>
 #include <stdlib.h>
 
+typedef struct
+{
+    int *data;       // Pointer to the array storing integers
+    size_t size;     // Current number of elements
+    size_t capacity; // Maximum capacity before resizing
+} int_vec;
+
+int_vec *intvec_new(size_t initialCapacity);
+void intvec_init(int_vec *vec, size_t initialCapacity);
+void intvec_pushback(int_vec *vec, int value);
+int intvec_getitem(int_vec *vec, size_t index);
+void intvec_free(int_vec *vec);
+
 typedef struct wordItem
 {
     char *word;
-    int lines[100];
-    int linesCount;
+    int_vec *lines;
 } wordItem_t, *wordsStorage_t;
 
 FILE *openFile(char *filename);

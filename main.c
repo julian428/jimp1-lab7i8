@@ -4,7 +4,13 @@
 
 int main(int argc, char **argv)
 {
-    FILE *input = openFile(argc > 1 ? argv[1] : NULL);
+    if (argc < 4)
+    {
+        fprintf(stderr, "Usage: %s <file> <sort> <word1> <word2> ... <wordN>\n", argv[0]);
+        return 1;
+    }
+
+    FILE *input = openFile(argv[1]);
 
     if (input == NULL)
     {
@@ -18,7 +24,7 @@ int main(int argc, char **argv)
 
     checkWords(input, ws, wordsToFindCount);
 
-    int sortResults = argc > 2 && atoi(argv[2]);
+    int sortResults = atoi(argv[2]);
 
     printLines(ws, wordsToFindCount, stdout, sortResults);
     freeWordsMemory(ws, wordsToFindCount);
